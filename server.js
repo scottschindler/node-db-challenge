@@ -6,42 +6,42 @@ const server = express();
 
 server.use(express.json());
 
-server.get("/api/species", async (req, res) => {
+server.get("/api/projects", async (req, res) => {
   // get all species from the database
   try {
-    const species = await db("species");
-    res.status(200).json(species);
+    const projects = await db("projects");
+    res.status(200).json(projects);
   } catch (error) {
     res.status(500).json(error);
   }
 });
 
-server.get("/api/animals", async (req, res) => {
-  // get all animals from the database
-  try {
-    // include species name
-    const animals = await db("animals").leftJoin(
-      "species",
-      "species.id",
-      "species_id"
-    );
+// server.get("/api/animals", async (req, res) => {
+//   // get all animals from the database
+//   try {
+//     // include species name
+//     const animals = await db("animals").leftJoin(
+//       "species",
+//       "species.id",
+//       "species_id"
+//     );
 
-    res.status(200).json(animals);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+//     res.status(200).json(animals);
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
 
 // create animal
-server.post("/api/animals", async (req, res) => {
+server.post("/api/projects", async (req, res) => {
   try {
-    const [id] = await db("animals").insert(req.body);
+    const [id] = await db("projects").insert(req.body);
 
-    const animal = await db("animals")
+    const project = await db("projects")
       .where({ id })
       .first();
 
-    res.status(201).json(animal);
+    res.status(201).json(project);
   } catch (error) {
     res.status(500).json(error);
   }
