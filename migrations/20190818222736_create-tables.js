@@ -29,14 +29,14 @@ exports.up = function(knex) {
         .notNullable()
         .unique();
       tbl.string("description", 128).notNullable();
-      //tbl.boolean("completed").defaultTo(false);
+      tbl.boolean("completed").defaultTo(false);
     })
 
     .createTable("tasks", tbl => {
       tbl.increments();
       tbl.string("description", 128).notNullable();
       tbl.string("notes", 256);
-      //tbl.boolean("completed").defaultTo(false);
+      tbl.boolean("completed").defaultTo(false);
 
       tbl
         .integer("project_id")
@@ -50,11 +50,11 @@ exports.up = function(knex) {
 
       tbl.string("name", 128).notNullable();
 
-      tbl
-        .integer("project_id")
-        .unsigned()
-        .notNullable()
-        .references("projects.id");
+      // tbl
+      //   .integer("project_id")
+      //   .unsigned()
+      //   .notNullable()
+      //   .references("projects.id");
     })
 
     .createTable("projects-tasks-resources", tbl => {
