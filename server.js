@@ -17,40 +17,26 @@ server.get("/api/projects", async (req, res) => {
   }
 });
 
-// get tasks by project id
-server.get("/api/projects/:id/tasks", async (req, res) => {
-  console.log("endpoint hit");
+// GET a project by id
+server.get("/api/projects/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const project_id = req.params.id;
-    const tasks = await db("tasks").where({ project_id });
-    console.log(tasks);
-    res.status(200).json(tasks);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    const [project] = await db("projects").where({ id });
+    if (project) {
+      res.status(200).json(project);
+    } else {
+      res.status(404).json({
+        message: "Could not find the specified food item in database 🤷‍"
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Error retrieving the requested info from database 💩",
+      error: err
+    });
   }
 });
-
-// server.get("/api/projects/:id/tasks", async (req, res) => {
-//   const { id } = req.params;
-
-//   try {
-//     const tasks = await db.getTasks(id);
-//     if (tasks) {
-//       res.status(200).json({ success: true, tasks });
-//     } else {
-//       res.status(404).json({
-//         success: false,
-//         error: `Could not find project with id ${id}`
-//       });
-//     }
-//   } catch (err) {
-//     res.status(500).json({
-//       success: false,
-//       error: "There was an error while retrieving the tasks."
-//     });
-//   }
-// });
 
 // create project
 server.post("/api/projects", async (req, res) => {
@@ -63,6 +49,20 @@ server.post("/api/projects", async (req, res) => {
 
     res.status(201).json(project);
   } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// get tasks by project id
+server.get("/api/projects/:id/tasks", async (req, res) => {
+  console.log("endpoint hit");
+  try {
+    const project_id = req.params.id;
+    const tasks = await db("tasks").where({ project_id });
+    console.log(tasks);
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 });
@@ -81,27 +81,6 @@ server.post("/api/projects/:id/tasks", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
-  }
-});
-
-// GET a specific project by id
-server.get("/api/projects/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const [project] = await db("projects").where({ id });
-    if (project) {
-      res.status(200).json(project);
-    } else {
-      res.status(404).json({
-        message: "Could not find the specified food item in database 🤷‍"
-      });
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "Error retrieving the requested info from database 💩",
-      error: err
-    });
   }
 });
 
